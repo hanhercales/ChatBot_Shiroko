@@ -32,8 +32,8 @@ async def on_message(message):
         prompt = message.content.strip()
 
         # Sử dụng API OpenAI với cú pháp mới
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+        response = openai.completions.create(
+            model="gpt-3.5-turbo",  # hoặc model phù hợp khác
             messages=[
                 {"role": "system", "content": personality_prefix},
                 {"role": "user", "content": prompt}
