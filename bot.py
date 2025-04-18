@@ -24,6 +24,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+    print(f"Nhận được tin nhắn từ {message.author}: {message.content}")
     
     if client.user.mentioned_in(message) or message.content.startswith("!chat"):
         prompt = message.content.replace("!chat", "").replace(f"<@{client.user.id}>", "").strip()
