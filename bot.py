@@ -7,7 +7,9 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 OPENAI_KEY = os.getenv("OPENAI_API_KEY")
 
+# Cài đặt API key OpenAI
 openai.api_key = OPENAI_KEY
+
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
@@ -26,6 +28,7 @@ async def on_message(message):
     if client.user.mentioned_in(message) or message.content.startswith("!chat"):
         prompt = message.content.replace("!chat", "").replace(f"<@{client.user.id}>", "").strip()
 
+        # Sử dụng API OpenAI mới
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -34,7 +37,8 @@ async def on_message(message):
             ]
         )
 
-        reply = response.choices[0].message.content
+        # Trả lời bot với nội dung từ OpenAI
+        reply = response['choices'][0]['message']['content']
         await message.channel.send(reply)
 
 client.run(TOKEN)
