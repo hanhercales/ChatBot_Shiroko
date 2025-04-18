@@ -24,22 +24,18 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    print(f"Nhận được tin nhắn từ {message.author}: {message.content}")
     
     if client.user.mentioned_in(message) or message.content.startswith("!chat"):
         prompt = message.content.replace("!chat", "").replace(f"<@{client.user.id}>", "").strip()
 
-        # Sử dụng API OpenAI mới
-        response = openai.ChatCompletion.create(
+        # Sử dụng API OpenAI với cú pháp mới
+        response = openai.Completion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": personality_prefix},
-                {"role": "user", "content": prompt}
-            ]
+            prompt=personality_prefix + "\n" + prompt,
+            max_tokens=150
         )
 
-        # Trả lời bot với nội dung từ OpenAI
-        reply = response['choices'][0]['message']['content']
+        reply = response['choices'][0]['text'].strip()
         await message.channel.send(reply)
 
 client.run(TOKEN)
